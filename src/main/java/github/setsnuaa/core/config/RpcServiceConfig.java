@@ -16,10 +16,13 @@ import lombok.*;
 @NoArgsConstructor
 public class RpcServiceConfig {
     /**
-     * version
-     * 用来区分同一接口的不同实现
+     * service version
      */
     private String version = "";
+    /**
+     * 用来区分同一接口的不同实现
+     */
+    private String group = "";
 
     /**
      * rpc service
@@ -27,6 +30,6 @@ public class RpcServiceConfig {
     private Object service;
 
     public String getServiceName() {
-        return this.service.getClass().getCanonicalName() + " version:" + this.version;
+        return this.service.getClass().getCanonicalName() + " group:" + this.group + " version:" + this.version;
     }
 }

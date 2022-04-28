@@ -1,5 +1,6 @@
 package github.setsnuaa.core.proxy;
 
+import java.lang.reflect.Proxy;
 import java.util.*;
 
 /**
@@ -8,7 +9,7 @@ import java.util.*;
  * @date:2022/4/27 18:56
  * @description:
  */
-public class Main {
+public class Tx {
     public static void main(String[] args) {
         TreeNode root = new TreeNode(1);
         root.left = new TreeNode(2);
