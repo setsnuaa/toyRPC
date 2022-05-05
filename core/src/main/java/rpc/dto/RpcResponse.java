@@ -1,6 +1,7 @@
-package github.setsnuaa.core.rpc.dto;
+package rpc.dto;
 
-import github.setsnuaa.common.enums.RpcResponseCodeEnum;
+
+import enums.RpcResponseCodeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

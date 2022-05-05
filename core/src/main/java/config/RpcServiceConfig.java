@@ -1,4 +1,4 @@
-package github.setsnuaa.core.config;
+package config;
 
 
 import lombok.*;

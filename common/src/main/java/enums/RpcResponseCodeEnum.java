@@ -1,4 +1,4 @@
-package github.setsnuaa.common.enums;
+package enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package github.setsnuaa.core.rpc.dto;
+package rpc.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package github.setsnuaa.core.proxy;
+package client.proxy;
 
 import java.lang.reflect.Proxy;
 import java.util.*;

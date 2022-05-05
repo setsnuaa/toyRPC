@@ -1,4 +1,4 @@
-package github.setsnuaa.core.proxy;
+package client.proxy;
 
 /**
  * @name:

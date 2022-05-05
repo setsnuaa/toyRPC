@@ -1,4 +1,4 @@
-package github.setsnuaa.core.provider;
+package provider;
 
 /**
  * @name:
