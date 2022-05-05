@@ -17,8 +17,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder
-@ToString
 public class RpcMessage {
     /**
      * 消息类型

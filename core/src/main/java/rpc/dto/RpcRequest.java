@@ -1,10 +1,6 @@
 package rpc.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -17,8 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Builder
-@ToString
+@Setter
 public class RpcRequest implements Serializable {
     //serialVersionUID用来判断序列化前和反序列化后的两个类是否相同
     private static final long serialVersionUID = 1L;
@@ -28,9 +23,8 @@ public class RpcRequest implements Serializable {
     private Object[] params;
     private Class<?>[] paramTypes;
     private String version;
-    private String group;
 
     public String getRpcServiceName() {
-        return this.getInterfaceName() + " group:" + this.group + " version:" + this.version;
+        return this.getInterfaceName() + " version:" + this.version;
     }
 }
