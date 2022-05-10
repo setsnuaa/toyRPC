@@ -33,10 +33,10 @@ public class ProtobufSerializer implements Serializer {
         Schema<T> schema = getSchema(clazz);
         byte[] bytes;
         try {
-            bytes = ProtobufIOUtil.toByteArray(obj,schema,BUFFER);
-        }catch (Exception e){
+            bytes = ProtobufIOUtil.toByteArray(obj, schema, BUFFER);
+        } catch (Exception e) {
             throw new SerializeException(e.getMessage());
-        }finally {
+        } finally {
             BUFFER.clear();
         }
         return bytes;
@@ -47,9 +47,9 @@ public class ProtobufSerializer implements Serializer {
         try {
             Schema<T> schema = getSchema(clazz);
             T obj = schema.newMessage();
-            ProtobufIOUtil.mergeFrom(bytes,obj,schema);
+            ProtobufIOUtil.mergeFrom(bytes, obj, schema);
             return obj;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new SerializeException(e.getMessage());
         }
     }

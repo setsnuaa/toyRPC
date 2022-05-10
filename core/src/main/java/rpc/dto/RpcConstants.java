@@ -1,4 +1,4 @@
-package constants;
+package rpc.dto;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
