@@ -12,13 +12,8 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        List<Integer> list = new ArrayList<>();
-        System.out.println(getclass(list));
-        list=new LinkedList<>();
-        System.out.println(getclass(list));
+        System.out.println(ArrayList.class);
     }
 
-    public static <T> Class<T> getclass(T obj){
-        return (Class<T>) obj.getClass();
-    }
+
 }
