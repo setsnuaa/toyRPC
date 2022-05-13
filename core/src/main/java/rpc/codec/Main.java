@@ -14,8 +14,15 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println(ArrayList.class);
+        System.out.println(MyInterface.class);
+        System.out.println(Impl.class);
     }
 
+    public static interface MyInterface{
 
+    }
+
+    public static class Impl implements MyInterface{
+
+    }
 }

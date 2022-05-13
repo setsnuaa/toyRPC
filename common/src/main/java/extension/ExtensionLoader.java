@@ -3,12 +3,17 @@ package extension;
 import lombok.extern.slf4j.Slf4j;
 import util.StringUtil;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * @name:
@@ -20,10 +25,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ExtensionLoader<T> {
 
     private static final String SERVICE_DIRECTORY = "META_INF/extensions";
+    //<Class<Serializer>, ExtensionLoader<Serializer>>，只保存接口
     private static final Map<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<>();
 
     private final Class<?> type;
+    //为什么两个Instances缓存？static的存真正的instance，下面这个存持有instance的holder
     private final Map<String, Holder<Object>> cachedInstances = new ConcurrentHashMap<>();
     private final Holder<Map<String, Class<?>>> cachedClasses = new Holder<>();
 
@@ -107,7 +114,8 @@ public final class ExtensionLoader<T> {
                 classes = cachedClasses.get();
                 if (classes == null) {
                     classes = new HashMap<>();
-                    //从扩展目录加载所有扩展
+                    //从扩展目录加载某个接口对应的所有实现类
+                    //比如加载Serializer对应的所有实现类
                     loadDirectory(classes);
                     cachedClasses.set(classes);
                 }
@@ -131,7 +139,39 @@ public final class ExtensionLoader<T> {
         }
     }
 
+    /**
+     * 加载接口对应的所有实现类
+     */
     private void loadResource(Map<String, Class<?>> extensionClasses, ClassLoader classLoader, URL resourceUrl) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(resourceUrl.openStream(), UTF_8))) {
+            String line;
+            // read every line
+            while ((line = reader.readLine()) != null) {
+                // get index of comment
+                final int ci = line.indexOf('#');
+                if (ci >= 0) {
+                    // string after # is comment so we ignore it
+                    line = line.substring(0, ci);
+                }
+                line = line.trim();
+                if (line.length() > 0) {
+                    try {
+                        final int ei = line.indexOf('=');
+                        String name = line.substring(0, ei).trim();
+                        String clazzName = line.substring(ei + 1).trim();
+                        // our SPI use key-value pair so both of them must not be empty
+                        if (name.length() > 0 && clazzName.length() > 0) {
+                            Class<?> clazz = classLoader.loadClass(clazzName);
+                            extensionClasses.put(name, clazz);
+                        }
+                    } catch (ClassNotFoundException e) {
+                        log.error(e.getMessage());
+                    }
+                }
 
+            }
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 }
