@@ -21,6 +21,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class RpcResponse<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     private String requestId;

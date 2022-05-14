@@ -18,4 +18,13 @@ public enum CompressTypeEnum {
 
     private final byte code;
     private final String name;
+
+    public static String getName(byte code) {
+        for (CompressTypeEnum c : CompressTypeEnum.values()) {
+            if (c.code == code) {
+                return c.name;
+            }
+        }
+        return null;
+    }
 }
