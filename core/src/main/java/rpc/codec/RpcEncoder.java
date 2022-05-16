@@ -23,17 +23,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date:2022/5/10 14:54
  * @description:rpcMessage=head+body(request or response)
  * <rpcMessage>
- * 0   1   2   3   4             5           6          7                  8  9  10 11 12
- * +---+---+---+---+-------------+-----------+----------+------------------+--+--+--+--+
- * | full length   | messageType | serialize | compress | protocol version | messageID |
+ * 0                  1   2   3   4   5             6           7          8  9  10 11 12
+ * +------------------+---+---+---+---+-------------+-----------+----------+--+--+--+--+
+ * | protocol version | full length   | messageType | serialize | compress | messageID |
  * +-----------------------+--------+---------------------+-----------+----------------+
  * |                                                                                   |
  * |                                         body                                      |
  * |                                                                                   |
  * |                                                                                   |
  * +-----------------------------------------------------------------------------------+
- * 4B full length（消息长度）    1B messageType（消息类型）
- * 1B serialize（序列化类型）    1B compress（压缩类型）    1B protocol version
+ * 1B protocol version         4B full length（消息长度）    1B messageType（消息类型）
+ * 1B serialize（序列化类型）    1B compress（压缩类型）
  * body（object类型数据）
  * </rpcMessage>
  */
@@ -48,13 +48,13 @@ public class RpcEncoder extends MessageToByteEncoder<RpcMessage> {
         try {
             //rpc message head
             int fullLength = RpcConstants.HEAD_LENGTH;
+            byteBuf.writeByte(RpcConstants.Protocol_VERSION);
             //留4个字节给full length
-            byteBuf.writeInt(byteBuf.writableBytes() + 4);
+            byteBuf.writerIndex(byteBuf.writerIndex() + 4);
             byte messageType = rpcMessage.getMessageType();
             byteBuf.writeByte(messageType);
             byteBuf.writeByte(rpcMessage.getSerializeType());
             byteBuf.writeByte(rpcMessage.getCompressType());
-            byteBuf.writeByte(RpcConstants.Protocol_VERSION);
             byteBuf.writeInt(ATOMIC_INTEGER.getAndIncrement());
 
             //rpc message body
@@ -76,7 +76,7 @@ public class RpcEncoder extends MessageToByteEncoder<RpcMessage> {
             }
 
             int writeIndex = byteBuf.writerIndex();
-            byteBuf.writerIndex(writeIndex - fullLength);
+            byteBuf.writerIndex(writeIndex - fullLength+1);
             byteBuf.writeInt(fullLength);
             byteBuf.writerIndex(writeIndex);
         } catch (Exception e) {
