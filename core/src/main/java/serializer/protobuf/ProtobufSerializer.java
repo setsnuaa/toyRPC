@@ -28,9 +28,9 @@ public class ProtobufSerializer implements Serializer {
         return (Schema<T>) cachedSchema.computeIfAbsent(cls, key -> RuntimeSchema.getSchema(key));
     }
 
-    public <T> byte[] serialize(T obj) {
-        Class<T> clazz = (Class<T>) obj.getClass();
-        Schema<T> schema = getSchema(clazz);
+    public byte[] serialize(Object obj) {
+        Class<?> clazz = obj.getClass();
+        Schema schema = getSchema(clazz);
         byte[] bytes;
         try {
             bytes = ProtobufIOUtil.toByteArray(obj, schema, BUFFER);
