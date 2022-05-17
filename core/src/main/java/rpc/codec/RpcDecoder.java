@@ -1,12 +1,19 @@
 package rpc.codec;
 
+import compress.Compress;
 import constants.RpcConstants;
+import enums.CompressTypeEnum;
+import enums.SerializationTypeEnum;
+import extension.ExtensionLoader;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import rpc.dto.RpcMessage;
+import rpc.dto.RpcRequest;
+import rpc.dto.RpcResponse;
 import serializer.Serializer;
 
 import java.util.List;
@@ -33,11 +40,11 @@ import java.util.List;
 @Slf4j
 public class RpcDecoder extends LengthFieldBasedFrameDecoder {
     public RpcDecoder() {
-        //full length在第一个字节，所以lengthFiledOffset=0
-        //full length占四个字节，所以lengthFieldLength=4
-        //已经读了4个字节，所以lengthAdjustment=-4
+        //full length在第2个字节，所以lengthFiledOffset=1
+        //full length占4个字节，所以lengthFieldLength=4
+        //已经读了5个字节，所以lengthAdjustment=-5
         //读取head+body，所以initialBytesToStrip=0
-        this(RpcConstants.MAX_FRAME_LENGTH, 0, 4, -4, 0);
+        this(RpcConstants.MAX_FRAME_LENGTH, 1, 4, -5, 0);
     }
 
     /**
@@ -72,7 +79,56 @@ public class RpcDecoder extends LengthFieldBasedFrameDecoder {
     }
 
     private Object decodeMessage(ByteBuf in) {
-        return null;
+        //读取head
+        checkVersion(in);
+        int fullLength = in.readInt();
+        byte messageType = in.readByte();
+        byte serializeType = in.readByte();
+        byte compressType = in.readByte();
+        int messageId = in.readInt();
+
+        RpcMessage rpcMessage = RpcMessage.builder()
+                .messageType(messageType)
+                .serializeType(serializeType)
+                .compressType(compressType).build();
+
+        if (messageType == RpcConstants.HEARTBEAT_REQUEST_TYPE) {
+            rpcMessage.setData(RpcConstants.PING);
+            return rpcMessage;
+        }
+
+        if (messageType == RpcConstants.HEARTBEAT_RESPONSE_TYPE) {
+            rpcMessage.setData(RpcConstants.PONG);
+            return rpcMessage;
+        }
+
+        int bodyLength = fullLength - RpcConstants.HEAD_LENGTH;
+        if (bodyLength > 0) {
+            byte[] body = new byte[bodyLength];
+            in.readBytes(body);
+            //解压
+            String compressName = CompressTypeEnum.getName(compressType);
+            log.info("compress name:[{}]", compressName);
+            Compress compress = ExtensionLoader
+                    .getExtensionLoader(Compress.class)
+                    .getExtension(compressName);
+            body = compress.decompress(body);
+            //反序列化
+            String serializerName = SerializationTypeEnum.getName(rpcMessage.getSerializeType());
+            log.info("serializer name:[{}]", serializerName);
+            Serializer serializer = ExtensionLoader
+                    .getExtensionLoader(Serializer.class)
+                    .getExtension(serializerName);
+            if (messageType == RpcConstants.REQUEST_TYPE) {
+                RpcRequest request = serializer.deserialize(body, RpcRequest.class);
+                rpcMessage.setData(request);
+            } else {
+                RpcResponse response = serializer.deserialize(body, RpcResponse.class);
+                rpcMessage.setData(response);
+            }
+        }
+        return rpcMessage;
+
     }
 
     private void checkVersion(ByteBuf in) {
