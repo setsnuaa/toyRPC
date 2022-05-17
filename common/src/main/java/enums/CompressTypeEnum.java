@@ -13,6 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 public enum CompressTypeEnum {
+    NULL((byte) 0x00, "null"),
     GZIP((byte) 0x01, "gzip"),
     SNAPPY((byte) 0x02, "snappy");
 
