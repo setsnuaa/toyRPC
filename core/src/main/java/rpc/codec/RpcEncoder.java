@@ -66,6 +66,7 @@ public class RpcEncoder extends MessageToByteEncoder<RpcMessage> {
                 Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(serializerName);
                 body = serializer.serialize(rpcMessage.getData());
                 String compressName = CompressTypeEnum.getName(rpcMessage.getCompressType());
+                log.info("compress name:[{}]", compressName);
                 Compress compress = ExtensionLoader.getExtensionLoader(Compress.class).getExtension(compressName);
                 body = compress.compress(body);
                 fullLength += body.length;
@@ -76,7 +77,7 @@ public class RpcEncoder extends MessageToByteEncoder<RpcMessage> {
             }
 
             int writeIndex = byteBuf.writerIndex();
-            byteBuf.writerIndex(writeIndex - fullLength+1);
+            byteBuf.writerIndex(writeIndex - fullLength + 1);
             byteBuf.writeInt(fullLength);
             byteBuf.writerIndex(writeIndex);
         } catch (Exception e) {
