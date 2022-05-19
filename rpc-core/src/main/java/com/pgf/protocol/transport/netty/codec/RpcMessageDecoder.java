@@ -1,7 +1,7 @@
-package com.pgf.protocol.codec;
+package com.pgf.protocol.transport.netty.codec;
 
 import com.pgf.compress.Compress;
-import com.pgf.constants.RpcConstants;
+import com.pgf.protocol.constants.RpcConstants;
 import com.pgf.enums.CompressTypeEnum;
 import com.pgf.enums.SerializationTypeEnum;
 import com.pgf.extension.ExtensionLoader;
@@ -34,8 +34,8 @@ import com.pgf.serializer.Serializer;
  * </rpcMessage>
  */
 @Slf4j
-public class RpcDecoder extends LengthFieldBasedFrameDecoder {
-    public RpcDecoder() {
+public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
+    public RpcMessageDecoder() {
         //full length在第2个字节，所以lengthFiledOffset=1
         //full length占4个字节，所以lengthFieldLength=4
         //已经读了5个字节，所以lengthAdjustment=-5
@@ -50,8 +50,8 @@ public class RpcDecoder extends LengthFieldBasedFrameDecoder {
      * @param lengthAdjustment    这个数加上之前的某个长度就是这次需要的数据的结尾
      * @param initialBytesToStrip 需要的数据的开头，比如需要head+body，那设置为0，只需要body，设置为head的长度
      */
-    public RpcDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength,
-                      int lengthAdjustment, int initialBytesToStrip) {
+    public RpcMessageDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength,
+                             int lengthAdjustment, int initialBytesToStrip) {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip);
     }
 

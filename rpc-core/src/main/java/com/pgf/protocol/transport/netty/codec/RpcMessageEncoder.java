@@ -1,7 +1,7 @@
-package com.pgf.protocol.codec;
+package com.pgf.protocol.transport.netty.codec;
 
 import com.pgf.compress.Compress;
-import com.pgf.constants.RpcConstants;
+import com.pgf.protocol.constants.RpcConstants;
 import com.pgf.enums.CompressTypeEnum;
 import com.pgf.enums.SerializationTypeEnum;
 import com.pgf.extension.ExtensionLoader;
@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @AllArgsConstructor
-public class RpcEncoder extends MessageToByteEncoder<RpcMessage> {
+public class RpcMessageEncoder extends MessageToByteEncoder<RpcMessage> {
     //自增ID
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(0);
 
