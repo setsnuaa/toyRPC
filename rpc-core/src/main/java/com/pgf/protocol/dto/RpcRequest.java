@@ -15,6 +15,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Builder
+@ToString
 public class RpcRequest implements Serializable {
     //serialVersionUID用来判断序列化前和反序列化后的两个类是否相同
     private static final long serialVersionUID = 1L;

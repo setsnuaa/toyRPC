@@ -2,11 +2,7 @@ package com.pgf.protocol.dto;
 
 
 import com.pgf.enums.RpcResponseCodeEnum;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -21,6 +17,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Builder
+@ToString
 public class RpcResponse<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     private String requestId;

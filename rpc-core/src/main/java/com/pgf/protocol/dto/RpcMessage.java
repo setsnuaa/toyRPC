@@ -13,6 +13,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@ToString
 public class RpcMessage {
     private byte messageType;
 
