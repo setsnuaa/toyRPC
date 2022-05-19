@@ -1,4 +1,4 @@
-package com.pgf.protocol.codec;
+package com.pgf.protocol.transport.netty.codec;
 
 /**
  * @name:
