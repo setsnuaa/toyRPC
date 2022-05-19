@@ -1,4 +1,4 @@
-package com.pgf.constants;
+package com.pgf.protocol.constants;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
