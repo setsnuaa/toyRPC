@@ -1,10 +1,13 @@
 package com.pgf.protocol.transport.netty.client;
 
+import com.pgf.enums.CompressTypeEnum;
+import com.pgf.enums.SerializationTypeEnum;
 import com.pgf.factory.SingletonFactory;
 import com.pgf.protocol.constants.RpcConstants;
 import com.pgf.protocol.dto.RpcMessage;
 import com.pgf.protocol.dto.RpcResponse;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
@@ -57,10 +60,26 @@ public class NettyRpcClientHandler extends ChannelInboundHandlerAdapter {
         //IdleStateEvent是netty定义的用来发送心跳的类
         if (evt instanceof IdleStateEvent) {
             IdleState state = ((IdleStateEvent) evt).state();
+            //客户端长时间没有向服务端发消息，就发送一个心跳包给服务端
             if (state == IdleState.WRITER_IDLE) {
                 log.info("write idle happen [{}]", ctx.channel().remoteAddress());
                 Channel channel = nettyRpcClient.getChannel((InetSocketAddress) ctx.channel().remoteAddress());
+                RpcMessage rpcMessage = new RpcMessage();
+                rpcMessage.setSerializeType(SerializationTypeEnum.PROTOSTUFF.getCode());
+                rpcMessage.setCompressType(CompressTypeEnum.SNAPPY.getCode());
+                rpcMessage.setMessageType(RpcConstants.HEARTBEAT_REQUEST_TYPE);
+                rpcMessage.setData(RpcConstants.PING);
+                channel.writeAndFlush(rpcMessage).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            } else {
+                super.userEventTriggered(ctx, evt);
             }
         }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.error("client catch exception：", cause);
+        cause.printStackTrace();
+        ctx.close();
     }
 }
