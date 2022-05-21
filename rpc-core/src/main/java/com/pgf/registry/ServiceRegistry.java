@@ -1,5 +1,7 @@
 package com.pgf.registry;
 
+import java.net.InetSocketAddress;
+
 /**
  * @name:
  * @author:pan.gefei
@@ -7,4 +9,5 @@ package com.pgf.registry;
  * @description:
  */
 public interface ServiceRegistry {
+    void registerService(String rpcServiceName, InetSocketAddress inetSocketAddress);
 }
