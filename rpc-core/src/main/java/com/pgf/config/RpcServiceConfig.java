@@ -14,6 +14,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class RpcServiceConfig {
     /**
      * service version
@@ -30,6 +31,10 @@ public class RpcServiceConfig {
     private Object service;
 
     public String getServiceName() {
-        return this.service.getClass().getCanonicalName() + " group:" + this.group + " version:" + this.version;
+        return this.service.getClass().getInterfaces()[0].getCanonicalName();
+    }
+
+    public String getRpcServiceName() {
+        return getServiceName() + this.getGroup() + this.getVersion();
     }
 }

@@ -25,6 +25,7 @@ public class RpcRequest implements Serializable {
     private Object[] params;
     private Class<?>[] paramTypes;
     private String version;
+    private String group;
 
     public String getRpcServiceName() {
         return this.getInterfaceName() + " version:" + this.version;
