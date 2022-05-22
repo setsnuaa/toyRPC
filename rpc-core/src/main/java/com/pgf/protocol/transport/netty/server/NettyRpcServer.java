@@ -82,6 +82,7 @@ public class NettyRpcServer {
             //等待服务端绑定端口
             ChannelFuture future = bootstrap.bind(host, PORT).sync();
             //等待服务端用于监听的channel关闭
+            //当前线程会阻塞，但是bossGroup、workerGroup和handlerGroup这3个线程池会正常运行
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             log.error("occur exception when start server:", e);
