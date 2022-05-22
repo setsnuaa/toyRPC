@@ -1,7 +1,6 @@
 package com.pgf.protocol.transport.netty.server;
 
 import com.pgf.enums.CompressTypeEnum;
-import com.pgf.enums.RpcResponseCodeEnum;
 import com.pgf.enums.SerializationTypeEnum;
 import com.pgf.factory.SingletonFactory;
 import com.pgf.protocol.constants.RpcConstants;
