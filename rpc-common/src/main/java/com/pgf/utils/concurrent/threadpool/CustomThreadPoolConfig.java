@@ -1,4 +1,4 @@
-package com.pgf.util.concurrent.threadpool;
+package com.pgf.utils.concurrent.threadpool;
 
 import lombok.Getter;
 import lombok.Setter;

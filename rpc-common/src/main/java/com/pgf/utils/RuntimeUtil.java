@@ -1,4 +1,4 @@
-package com.pgf.util;
+package com.pgf.utils;
 
 /**
  * @name:
