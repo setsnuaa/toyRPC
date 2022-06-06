@@ -1,8 +1,8 @@
 package com.pgf.config;
 
 import com.pgf.protocol.transport.netty.server.NettyRpcServer;
-import com.pgf.registry.zk.CuratorUtils;
-import com.pgf.util.concurrent.threadpool.ThreadPoolFactoryUtil;
+import com.pgf.registry.zk.util.CuratorUtils;
+import com.pgf.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
