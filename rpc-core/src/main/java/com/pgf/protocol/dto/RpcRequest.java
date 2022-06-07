@@ -28,6 +28,6 @@ public class RpcRequest implements Serializable {
     private String group;
 
     public String getRpcServiceName() {
-        return this.getInterfaceName() + " version:" + this.version;
+        return this.getInterfaceName() + this.getGroup() + this.getVersion();
     }
 }
