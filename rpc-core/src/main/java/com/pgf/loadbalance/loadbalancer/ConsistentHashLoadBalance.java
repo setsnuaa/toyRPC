@@ -59,7 +59,7 @@ public class ConsistentHashLoadBalance extends AbstractLoadBalance {
         }
 
         /**
-         * @param key 
+         * @param key
          * @return 16字节大小的数组（定长）
          */
         static byte[] md5(String key) {
