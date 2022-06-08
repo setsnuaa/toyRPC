@@ -50,6 +50,7 @@ public class RpcClientProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         log.info("invoked method: [{}]", method.getName());
+        // 将方法封装成rpc请求发给服务端
         RpcRequest rpcRequest = RpcRequest.builder().methodName(method.getName())
                 .params(args)
                 .interfaceName(method.getDeclaringClass().getName())
