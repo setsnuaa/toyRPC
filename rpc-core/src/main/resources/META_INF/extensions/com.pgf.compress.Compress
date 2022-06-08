@@ -1,0 +1,2 @@
+gzip=com.pgf.compress.gzip.GzipCompress
+snappy=com.pgf.compress.snappy.SnappyCompress
