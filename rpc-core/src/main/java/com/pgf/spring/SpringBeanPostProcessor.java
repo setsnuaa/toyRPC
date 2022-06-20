@@ -35,6 +35,10 @@ public class SpringBeanPostProcessor implements BeanPostProcessor {
         this.rpcClient = ExtensionLoader.getExtensionLoader(RpcRequestTransport.class).getExtension("netty");
     }
 
+    /**
+     * 有RpcService注解的实现类，在加载到容器中的时候就注册到注册中心
+     * 这个是针对服务端的bean加载
+     */
     @SneakyThrows
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -52,6 +56,10 @@ public class SpringBeanPostProcessor implements BeanPostProcessor {
         return bean;
     }
 
+    /**
+     * 有RpcReference注解的接口变量，把它需要的bean替换成动态代理对象
+     * 针对客户端的bean加载
+     */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         Class<?> targetClass = bean.getClass();
@@ -59,6 +67,8 @@ public class SpringBeanPostProcessor implements BeanPostProcessor {
         for (Field declaredField : declaredFields) {
             RpcReference rpcReference = declaredField.getAnnotation(RpcReference.class);
             if (rpcReference != null) {
+                //System.out.println(bean.getClass().getName());
+                //System.out.println("bean替换");
                 RpcServiceConfig rpcServiceConfig = RpcServiceConfig.builder()
                         .group(rpcReference.group())
                         .version(rpcReference.version()).build();
@@ -66,13 +76,12 @@ public class SpringBeanPostProcessor implements BeanPostProcessor {
                 Object clientProxy = rpcClientProxy.getProxy(declaredField.getType());
                 declaredField.setAccessible(true);
                 try {
-                    // 用动态代理类替换原来的bean
+                    // 用动态代理类作为有RpcReference注解的变量引用的对象
                     declaredField.set(bean, clientProxy);
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
             }
-
         }
         return bean;
     }

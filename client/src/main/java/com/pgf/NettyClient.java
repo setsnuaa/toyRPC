@@ -12,6 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 @RpcScan(basePackage = {"com.pgf"})
 public class NettyClient {
     public static void main(String[] args) {
+        // 容器启动之后先把单例模式对象全部实例化，这个时候就已经用动态代理对象作为HelloService的bean了
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(NettyClient.class);
         HelloController helloController=(HelloController) applicationContext.getBean("helloController");
         helloController.test();
