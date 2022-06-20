@@ -27,8 +27,7 @@ public final class SingletonFactory {
             return clazz.cast(OBJECT_MAP.computeIfAbsent(key, k -> {
                 try {
                     return clazz.getDeclaredConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                         NoSuchMethodException e) {
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     throw new RuntimeException(e.getMessage(), e);
                 }
             }));

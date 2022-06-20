@@ -11,6 +11,9 @@
     <modules>
         <module>rpc-core</module>
         <module>rpc-common</module>
+        <module>hello-api</module>
+        <module>client</module>
+        <module>server</module>
     </modules>
 
     <properties>

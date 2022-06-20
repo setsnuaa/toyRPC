@@ -43,18 +43,17 @@ public class ZkServiceProviderImpl implements ServiceProvider {
     public void addService(RpcServiceConfig rpcServiceConfig) {
         String rpcServiceName = rpcServiceConfig.getRpcServiceName();
         if (registeredService.contains(rpcServiceName)) {
-            //已经注册
             return;
         }
         registeredService.add(rpcServiceName);
         serviceMap.put(rpcServiceName, rpcServiceConfig.getService());
-        log.info("Add service: {} and interfaces: {}", rpcServiceName, rpcServiceConfig.getService().getClass().getInterfaces());
+        log.info("Add service: {} and interfaces:{}", rpcServiceName, rpcServiceConfig.getService().getClass().getInterfaces());
     }
 
     @Override
     public Object getService(String rpcServiceName) {
         Object service = serviceMap.get(rpcServiceName);
-        if (service == null) {
+        if (null == service) {
             throw new RpcException(RpcErrorMessageEnum.SERVICE_CAN_NOT_BE_FOUND);
         }
         return service;

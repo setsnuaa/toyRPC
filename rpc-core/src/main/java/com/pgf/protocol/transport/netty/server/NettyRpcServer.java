@@ -12,6 +12,7 @@ import com.pgf.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
@@ -65,9 +66,9 @@ public class NettyRpcServer {
                     //这里表示系统用于临时存放已完成三次握手的请求的队列的最大长度,如果连接建立频繁，服务器处理创建新连接较慢，可以适当调大这个参数
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ChannelInitializer<ServerChannel>() {
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(ServerChannel serverChannel) throws Exception {
+                        protected void initChannel(SocketChannel serverChannel) throws Exception {
                             serverChannel.pipeline()
                                     //in
                                     .addLast(new IdleStateHandler(30, 0, 0, TimeUnit.SECONDS))

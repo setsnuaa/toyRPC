@@ -104,7 +104,7 @@ public final class NettyRpcClient implements RpcRequestTransport {
 
             RpcMessage rpcMessage = RpcMessage.builder()
                     .messageType(RpcConstants.REQUEST_TYPE)
-                    .compressType(CompressTypeEnum.SNAPPY.getCode())
+                    .compressType(CompressTypeEnum.GZIP.getCode())
                     .serializeType(SerializationTypeEnum.PROTOSTUFF.getCode())
                     .data(rpcRequest).build();
 

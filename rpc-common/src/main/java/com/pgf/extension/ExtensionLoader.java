@@ -23,7 +23,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Slf4j
 public final class ExtensionLoader<T> {
 
-    private static final String SERVICE_DIRECTORY = "META_INF/extensions";
+    private static final String SERVICE_DIRECTORY = "META_INF/extensions/";
     //<Class<Serializer>, ExtensionLoader<Serializer>>，只保存接口
     private static final Map<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<>();
     private static final Map<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<>();
@@ -125,13 +125,16 @@ public final class ExtensionLoader<T> {
 
     private void loadDirectory(Map<String, Class<?>> extensionClasses) {
         String fileName = ExtensionLoader.SERVICE_DIRECTORY + type.getName();
+        System.out.println(fileName);
         try {
             Enumeration<URL> urls;
             ClassLoader classLoader = ExtensionLoader.class.getClassLoader();
             urls = classLoader.getResources(fileName);
             if (urls != null) {
-                URL resourceUrl = urls.nextElement();
-                loadResource(extensionClasses, classLoader, resourceUrl);
+                while (urls.hasMoreElements()) {
+                    URL resourceUrl = urls.nextElement();
+                    loadResource(extensionClasses, classLoader, resourceUrl);
+                }
             }
         } catch (IOException e) {
             log.error(e.getMessage());
