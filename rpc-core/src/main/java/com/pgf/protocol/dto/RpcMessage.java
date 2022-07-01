@@ -21,7 +21,6 @@ public class RpcMessage {
 
     private byte compressType;
 
-    //用于负载均衡
     private int messageID;
 
     private Object data;
