@@ -75,7 +75,7 @@ public class CuratorUtils {
         REGISTERED_PATH_SET.parallelStream().forEach(p -> {
             try {
                 // 把所有节点名后缀是服务器IP地址的节点都删了
-                // 节点命名的时候是
+                // 节点命名的时候是/my-rpc/serviceName/192.168.1.3:9090
                 if (p.endsWith(inetSocketAddress.toString())) {
                     zkClient.delete().forPath(p);
                 }
